@@ -1,76 +1,17 @@
-import { eparkEntries } from '@/lib/sample-data'
+import { createClient } from '@/lib/supabase-server'
+import { notFound } from 'next/navigation'
+import DogSalonEparkContent from '@/components/demo/dog-salon/EparkContent'
 
-export default function EparkPage() {
-  const pending = eparkEntries.filter(e => !e.is_transferred)
-  const done = eparkEntries.filter(e => e.is_transferred)
+type Props = { params: Promise<{ slug: string }> }
 
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' })
+export default async function EparkPage({ params }: Props) {
+  const { slug } = await params
+  const supabase = await createClient()
+  const { data: demo } = await supabase.from('demos').select('industry_template').eq('slug', slug).single()
+  if (!demo) notFound()
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-gray-800">eパーク 転記管理</h1>
-        <p className="text-sm text-gray-400 mt-0.5">eパークから入った予約を自社システムへ転記します</p>
-      </div>
+  // eパークはドッグサロン専用
+  if (demo.industry_template !== 'dog_salon') notFound()
 
-      {/* 疑似eパーク連携バナー */}
-      <div className="bg-orange-50 border border-orange-200 rounded-xl px-5 py-4 flex items-center gap-3">
-        <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
-          e
-        </div>
-        <div>
-          <p className="text-sm font-bold text-orange-700">eパーク 連携済み（デモ表示）</p>
-          <p className="text-xs text-orange-400">eパークの予約を一覧表示・ワンクリックで転記できます</p>
-        </div>
-      </div>
-
-      {/* 未転記 */}
-      <div>
-        <h2 className="text-sm font-bold text-gray-600 mb-3">
-          未転記 <span className="text-red-500 ml-1">{pending.length}件</span>
-        </h2>
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          {pending.length === 0 ? (
-            <p className="px-5 py-6 text-sm text-gray-400 text-center">未転記の予約はありません</p>
-          ) : (
-            <div className="divide-y divide-gray-50">
-              {pending.map(e => (
-                <div key={e.id} className="px-5 py-4 flex items-center gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-gray-400">{e.epark_id}</span>
-                    </div>
-                    <p className="font-bold text-gray-800 mt-0.5">{e.dog_name} <span className="font-normal text-gray-400 text-sm">（{e.customer_name} 様）</span></p>
-                    <p className="text-sm text-gray-500">{formatDate(e.reservation_date)} {e.reservation_time} ／ {e.service_type}</p>
-                  </div>
-                  <button className="text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition-colors flex-shrink-0">
-                    転記する
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 転記済み */}
-      <div>
-        <h2 className="text-sm font-bold text-gray-400 mb-3">転記済み {done.length}件</h2>
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-          <div className="divide-y divide-gray-50">
-            {done.map(e => (
-              <div key={e.id} className="px-5 py-3 flex items-center gap-4 opacity-60">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-600 text-sm">{e.dog_name} <span className="text-gray-400">（{e.customer_name} 様）</span></p>
-                  <p className="text-xs text-gray-400">{formatDate(e.reservation_date)} {e.reservation_time} ／ {e.service_type}</p>
-                </div>
-                <span className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">転記済み</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  return <DogSalonEparkContent />
 }

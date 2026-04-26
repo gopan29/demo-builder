@@ -1,20 +1,8 @@
-import { createClient } from '@/lib/supabase-server'
-import { notFound } from 'next/navigation'
-import { reservations, statusMap } from '@/lib/sample-data'
-import BeautySalonReservations from '@/components/demo/beauty-salon/ReservationsContent'
+import { beautyReservations, beautyStatusMap } from '@/lib/sample-data-beauty'
 
-type Props = { params: Promise<{ slug: string }> }
-
-export default async function ReservationsPage({ params }: Props) {
-  const { slug } = await params
-  const supabase = await createClient()
-  const { data: demo } = await supabase.from('demos').select('industry_template').eq('slug', slug).single()
-  if (!demo) notFound()
-
-  if (demo.industry_template === 'beauty_salon') return <BeautySalonReservations />
-
-  const grouped: Record<string, typeof reservations> = {}
-  reservations.forEach(r => {
+export default function BeautySalonReservations() {
+  const grouped: Record<string, typeof beautyReservations> = {}
+  beautyReservations.forEach(r => {
     if (!grouped[r.date]) grouped[r.date] = []
     grouped[r.date].push(r)
   })
@@ -22,17 +10,18 @@ export default async function ReservationsPage({ params }: Props) {
   const formatDate = (d: string) =>
     new Date(d).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' })
 
-  const sourceIcon: Record<string, string> = { '電話': '📞', 'LINE': '💬', 'eパーク': '🔗', '窓口': '🏠' }
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-800">予約管理</h1>
-          <p className="text-sm text-gray-400 mt-0.5">全 {reservations.length} 件</p>
+          <p className="text-sm text-gray-400 mt-0.5">全 {beautyReservations.length} 件</p>
         </div>
-        <button className="bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-lg opacity-60 cursor-default">＋ 新規予約（デモ）</button>
+        <button className="bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-lg opacity-60 cursor-default">
+          ＋ 新規予約（デモ）
+        </button>
       </div>
+
       {Object.entries(grouped).sort().map(([date, items]) => (
         <div key={date} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-3 bg-gray-50 border-b border-gray-100">
@@ -40,22 +29,21 @@ export default async function ReservationsPage({ params }: Props) {
           </div>
           <div className="divide-y divide-gray-50">
             {items.sort((a, b) => a.time.localeCompare(b.time)).map(r => {
-              const s = statusMap[r.status]
+              const s = beautyStatusMap[r.status]
               return (
                 <div key={r.id} className="px-5 py-4 flex items-start gap-4 hover:bg-gray-50 transition-colors">
                   <div className="w-12 flex-shrink-0 text-center">
                     <p className="text-sm font-bold text-gray-700">{r.time}</p>
+                    <p className="text-xs text-gray-400">{r.duration}分</p>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-gray-800">{r.dog_name}</span>
-                      <span className="text-xs text-gray-400">｜ {r.customer_name} 様</span>
+                      <span className="font-bold text-gray-800">{r.customer_name}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${s.color}`}>{s.label}</span>
                     </div>
                     <p className="text-sm text-gray-500 mt-0.5">{r.service_type}</p>
-                    {r.notes && <p className="text-xs text-gray-400 mt-0.5">📝 {r.notes}</p>}
+                    <p className="text-xs text-gray-400">担当: {r.staff_name} ／ ¥{r.price.toLocaleString()}</p>
                   </div>
-                  <div className="flex-shrink-0 text-sm text-gray-400">{sourceIcon[r.source] ?? ''} {r.source}</div>
                 </div>
               )
             })}

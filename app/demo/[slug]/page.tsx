@@ -1,16 +1,25 @@
 import { createClient } from '@/lib/supabase-server'
+import { notFound } from 'next/navigation'
 import { reservations, customers, dogs, lineCandidates, eparkEntries } from '@/lib/sample-data'
+import { beautyReservations, beautyCustomers, beautyLineCandidates } from '@/lib/sample-data-beauty'
+import BeautySalonDashboard from '@/components/demo/beauty-salon/DashboardContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
 export default async function DemoDashboard({ params }: Props) {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: demo } = await supabase.from('demos').select('theme_color').eq('slug', slug).single()
-  const color = demo?.theme_color ?? '#3B82F6'
+  const { data: demo } = await supabase.from('demos').select('theme_color, industry_template').eq('slug', slug).single()
+  if (!demo) notFound()
 
-  const todayStr = new Date().toISOString().split('T')[0]
-  const todayReservations = reservations.filter(r => r.date === todayStr || r.date === '2026-04-27')
+  const color = demo.theme_color
+
+  if (demo.industry_template === 'beauty_salon') {
+    return <BeautySalonDashboard themeColor={color} />
+  }
+
+  // dog_salon
+  const todayReservations = reservations.filter(r => r.date === '2026-04-27')
   const pendingLine = lineCandidates.filter(l => l.status === 'pending').length
   const pendingEpark = eparkEntries.filter(e => !e.is_transferred).length
   const confirmedToday = todayReservations.filter(r => r.status === 'confirmed').length
@@ -29,26 +38,17 @@ export default async function DemoDashboard({ params }: Props) {
         <h1 className="text-xl font-bold text-gray-800">ダッシュボード</h1>
         <p className="text-sm text-gray-400 mt-0.5">本日の業務サマリ</p>
       </div>
-
-      {/* サマリカード */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {stats.map(stat => (
-          <div
-            key={stat.label}
-            className="bg-white rounded-xl border p-4"
-            style={{ borderColor: stat.alert ? '#fca5a5' : '#e5e7eb' }}
-          >
+          <div key={stat.label} className="bg-white rounded-xl border p-4" style={{ borderColor: stat.alert ? '#fca5a5' : '#e5e7eb' }}>
             <p className="text-xs text-gray-400 mb-1">{stat.label}</p>
             <p className="text-3xl font-bold" style={{ color: stat.alert ? '#ef4444' : color }}>
-              {stat.value}
-              <span className="text-sm font-normal text-gray-400 ml-1">{stat.unit}</span>
+              {stat.value}<span className="text-sm font-normal text-gray-400 ml-1">{stat.unit}</span>
             </p>
             <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
           </div>
         ))}
       </div>
-
-      {/* 今日の予約 */}
       <div className="bg-white rounded-xl border border-gray-200">
         <div className="px-5 py-4 border-b border-gray-100">
           <h2 className="font-bold text-gray-800 text-sm">今日の予約</h2>
@@ -56,25 +56,19 @@ export default async function DemoDashboard({ params }: Props) {
         <div className="divide-y divide-gray-50">
           {todayReservations.length === 0 ? (
             <p className="px-5 py-6 text-sm text-gray-400 text-center">本日の予約はありません</p>
-          ) : (
-            todayReservations.map(r => (
-              <div key={r.id} className="px-5 py-3 flex items-center gap-4">
-                <span className="text-sm font-bold text-gray-500 w-12">{r.time}</span>
-                <div className="flex-1">
-                  <span className="text-sm font-medium text-gray-800">{r.dog_name}</span>
-                  <span className="text-xs text-gray-400 ml-2">（{r.customer_name}様）</span>
-                </div>
-                <span className="text-xs text-gray-500">{r.service_type}</span>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    r.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}
-                >
-                  {r.status === 'confirmed' ? '確定' : '仮予約'}
-                </span>
+          ) : todayReservations.map(r => (
+            <div key={r.id} className="px-5 py-3 flex items-center gap-4">
+              <span className="text-sm font-bold text-gray-500 w-12">{r.time}</span>
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-800">{r.dog_name}</span>
+                <span className="text-xs text-gray-400 ml-2">（{r.customer_name}様）</span>
               </div>
-            ))
-          )}
+              <span className="text-xs text-gray-500">{r.service_type}</span>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${r.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                {r.status === 'confirmed' ? '確定' : '仮予約'}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

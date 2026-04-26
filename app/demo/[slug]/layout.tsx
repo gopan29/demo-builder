@@ -21,7 +21,10 @@ export default async function DemoLayout({ children, params }: Props) {
   if (!demo) notFound()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-gray-50"
+      style={{ '--demo-color': demo.theme_color } as React.CSSProperties}
+    >
       <DemoNav demo={demo} slug={slug} />
       <main className="max-w-6xl mx-auto px-4 py-6">
         {children}
