@@ -42,20 +42,22 @@ export default async function ReservationsPage({ params }: Props) {
             {items.sort((a, b) => a.time.localeCompare(b.time)).map(r => {
               const s = statusMap[r.status]
               return (
-                <div key={r.id} className="px-5 py-4 flex items-start gap-4 hover:bg-gray-50 transition-colors">
+                <div key={r.id} className="px-4 py-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
                   <div className="w-12 flex-shrink-0 text-center">
                     <p className="text-sm font-bold text-gray-700">{r.time}</p>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-gray-800">{r.dog_name}</span>
-                      <span className="text-xs text-gray-400">｜ {r.customer_name} 様</span>
+                      <span className="font-semibold text-gray-800">{r.dog_name}</span>
+                      <span className="text-sm text-gray-500">{r.customer_name} 様</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${s.color}`}>{s.label}</span>
                     </div>
-                    <p className="text-sm text-gray-500 mt-0.5">{r.service_type}</p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <p className="text-sm text-gray-500">{r.service_type}</p>
+                      <p className="text-xs text-gray-400">{sourceIcon[r.source] ?? ''} {r.source}</p>
+                    </div>
                     {r.notes && <p className="text-xs text-gray-400 mt-0.5">📝 {r.notes}</p>}
                   </div>
-                  <div className="flex-shrink-0 text-sm text-gray-400">{sourceIcon[r.source] ?? ''} {r.source}</div>
                 </div>
               )
             })}

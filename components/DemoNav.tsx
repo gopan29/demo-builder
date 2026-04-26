@@ -30,7 +30,7 @@ export default function DemoNav({ demo, slug }: Props) {
           </div>
           <div>
             <span className="font-bold text-gray-800">{demo.client_name}</span>
-            <span className="ml-2 text-xs text-gray-400">
+            <span className="ml-2 text-xs text-gray-400 hidden sm:inline">
               {demo.industry_template === 'beauty_salon' ? '美容室管理システム' : 'ドッグサロン管理システム'}
             </span>
           </div>
@@ -43,7 +43,7 @@ export default function DemoNav({ demo, slug }: Props) {
         </span>
       </div>
 
-      <nav className="px-4 flex gap-0.5 overflow-x-auto">
+      <nav className="px-2 flex gap-0 overflow-x-auto">
         {navItems.map(item => {
           const href = `${base}${item.path}`
           const isActive = item.path === ''
@@ -54,7 +54,7 @@ export default function DemoNav({ demo, slug }: Props) {
             <Link
               key={item.path}
               href={href}
-              className="flex-shrink-0 text-xs font-medium px-3 py-3 border-b-2 transition-colors whitespace-nowrap"
+              className="flex-shrink-0 text-sm font-medium px-3.5 py-3.5 border-b-2 transition-colors whitespace-nowrap"
               style={{
                 borderBottomColor: isActive ? demo.theme_color : 'transparent',
                 color: isActive ? demo.theme_color : '#6b7280',

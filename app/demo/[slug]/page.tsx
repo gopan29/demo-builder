@@ -57,14 +57,16 @@ export default async function DemoDashboard({ params }: Props) {
           {todayReservations.length === 0 ? (
             <p className="px-5 py-6 text-sm text-gray-400 text-center">本日の予約はありません</p>
           ) : todayReservations.map(r => (
-            <div key={r.id} className="px-5 py-3 flex items-center gap-4">
-              <span className="text-sm font-bold text-gray-500 w-12">{r.time}</span>
-              <div className="flex-1">
-                <span className="text-sm font-medium text-gray-800">{r.dog_name}</span>
-                <span className="text-xs text-gray-400 ml-2">（{r.customer_name}様）</span>
+            <div key={r.id} className="px-4 py-3 flex items-center gap-3">
+              <span className="text-sm font-bold text-gray-500 w-12 flex-shrink-0">{r.time}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-sm font-semibold text-gray-800">{r.dog_name}</span>
+                  <span className="text-sm text-gray-500">{r.customer_name}様</span>
+                </div>
+                <p className="text-xs text-gray-400">{r.service_type}</p>
               </div>
-              <span className="text-xs text-gray-500">{r.service_type}</span>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${r.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${r.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                 {r.status === 'confirmed' ? '確定' : '仮予約'}
               </span>
             </div>

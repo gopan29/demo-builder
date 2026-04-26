@@ -27,16 +27,16 @@ export default async function CustomersPage({ params }: Props) {
           {customers.map(c => {
             const myDogs = dogs.filter(d => d.customer_id === c.id)
             return (
-              <div key={c.id} className="px-5 py-4 flex items-start gap-4 hover:bg-gray-50 transition-colors">
+              <div key={c.id} className="px-4 py-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
                 <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold flex-shrink-0">
                   {c.name.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-gray-800">{c.name}</span>
+                    <span className="font-semibold text-gray-800">{c.name}</span>
                     <span className="text-xs bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">{c.visit_count}回来店</span>
                   </div>
-                  <p className="text-xs text-gray-400 mt-0.5">{c.phone} ／ {c.email}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">{c.phone}</p>
                   {myDogs.length > 0 && (
                     <div className="flex gap-1.5 mt-1.5 flex-wrap">
                       {myDogs.map(d => (
@@ -47,7 +47,7 @@ export default async function CustomersPage({ params }: Props) {
                     </div>
                   )}
                 </div>
-                <span className="text-xs text-gray-300 flex-shrink-0">{c.registered_at} 登録</span>
+                <span className="text-xs text-gray-400 flex-shrink-0 hidden sm:block">{c.registered_at} 登録</span>
               </div>
             )
           })}
