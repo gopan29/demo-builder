@@ -5,6 +5,9 @@ import BeautySalonReservations from '@/components/demo/beauty-salon/Reservations
 import DentalReservations from '@/components/demo/dental-clinic/ReservationsContent'
 import RestaurantReservations from '@/components/demo/restaurant/ReservationsContent'
 import EstheticReservations from '@/components/demo/esthetic-salon/ReservationsContent'
+import OsteopathicReservations from '@/components/demo/osteopathic-clinic/ReservationsContent'
+import JukuClasses from '@/components/demo/juku/ClassesContent'
+import YogaClasses from '@/components/demo/yoga-fitness/ClassesContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -18,6 +21,9 @@ export default async function ReservationsPage({ params }: Props) {
   if (demo.industry_template === 'dental_clinic') return <DentalReservations />
   if (demo.industry_template === 'restaurant') return <RestaurantReservations />
   if (demo.industry_template === 'esthetic_salon') return <EstheticReservations />
+  if (demo.industry_template === 'osteopathic_clinic') return <OsteopathicReservations />
+  if (demo.industry_template === 'juku') return <JukuClasses />
+  if (demo.industry_template === 'yoga_fitness') return <YogaClasses />
 
   const grouped: Record<string, typeof reservations> = {}
   reservations.forEach(r => {

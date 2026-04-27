@@ -4,6 +4,9 @@ import { customers, dogs } from '@/lib/sample-data'
 import BeautySalonCustomers from '@/components/demo/beauty-salon/CustomersContent'
 import DentalPatients from '@/components/demo/dental-clinic/PatientsContent'
 import EstheticCustomers from '@/components/demo/esthetic-salon/CustomersContent'
+import OsteopathicPatients from '@/components/demo/osteopathic-clinic/PatientsContent'
+import JukuStudents from '@/components/demo/juku/StudentsContent'
+import YogaMembers from '@/components/demo/yoga-fitness/MembersContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -17,6 +20,9 @@ export default async function CustomersPage({ params }: Props) {
   if (demo.industry_template === 'dental_clinic') return <DentalPatients />
   if (demo.industry_template === 'esthetic_salon') return <EstheticCustomers />
   if (demo.industry_template === 'restaurant') notFound()
+  if (demo.industry_template === 'osteopathic_clinic') return <OsteopathicPatients />
+  if (demo.industry_template === 'juku') return <JukuStudents />
+  if (demo.industry_template === 'yoga_fitness') return <YogaMembers />
 
   return (
     <div className="space-y-5">

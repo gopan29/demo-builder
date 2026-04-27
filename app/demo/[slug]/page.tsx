@@ -6,6 +6,9 @@ import BeautySalonDashboard from '@/components/demo/beauty-salon/DashboardConten
 import DentalDashboard from '@/components/demo/dental-clinic/DashboardContent'
 import RestaurantDashboard from '@/components/demo/restaurant/DashboardContent'
 import EstheticDashboard from '@/components/demo/esthetic-salon/DashboardContent'
+import OsteopathicDashboard from '@/components/demo/osteopathic-clinic/DashboardContent'
+import JukuDashboard from '@/components/demo/juku/DashboardContent'
+import YogaDashboard from '@/components/demo/yoga-fitness/DashboardContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -21,6 +24,9 @@ export default async function DemoDashboard({ params }: Props) {
   if (demo.industry_template === 'dental_clinic') return <DentalDashboard themeColor={color} />
   if (demo.industry_template === 'restaurant') return <RestaurantDashboard themeColor={color} />
   if (demo.industry_template === 'esthetic_salon') return <EstheticDashboard themeColor={color} />
+  if (demo.industry_template === 'osteopathic_clinic') return <OsteopathicDashboard themeColor={color} />
+  if (demo.industry_template === 'juku') return <JukuDashboard themeColor={color} />
+  if (demo.industry_template === 'yoga_fitness') return <YogaDashboard themeColor={color} />
 
   // dog_salon
   const todayReservations = reservations.filter(r => r.date === '2026-04-27')

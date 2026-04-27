@@ -5,6 +5,9 @@ import BeautySalonRecords from '@/components/demo/beauty-salon/RecordsContent'
 import DentalRecords from '@/components/demo/dental-clinic/RecordsContent'
 import RestaurantSales from '@/components/demo/restaurant/SalesContent'
 import EstheticRecords from '@/components/demo/esthetic-salon/RecordsContent'
+import OsteopathicRecords from '@/components/demo/osteopathic-clinic/RecordsContent'
+import JukuAttendance from '@/components/demo/juku/AttendanceContent'
+import YogaRevenue from '@/components/demo/yoga-fitness/RevenueContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -18,6 +21,9 @@ export default async function RecordsPage({ params }: Props) {
   if (demo.industry_template === 'dental_clinic') return <DentalRecords />
   if (demo.industry_template === 'restaurant') return <RestaurantSales />
   if (demo.industry_template === 'esthetic_salon') return <EstheticRecords />
+  if (demo.industry_template === 'osteopathic_clinic') return <OsteopathicRecords />
+  if (demo.industry_template === 'juku') return <JukuAttendance />
+  if (demo.industry_template === 'yoga_fitness') return <YogaRevenue />
 
   return (
     <div className="space-y-5">
