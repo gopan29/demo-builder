@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase-server'
 import { notFound } from 'next/navigation'
 import { customers, dogs } from '@/lib/sample-data'
 import BeautySalonCustomers from '@/components/demo/beauty-salon/CustomersContent'
+import DentalPatients from '@/components/demo/dental-clinic/PatientsContent'
+import EstheticCustomers from '@/components/demo/esthetic-salon/CustomersContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -12,6 +14,9 @@ export default async function CustomersPage({ params }: Props) {
   if (!demo) notFound()
 
   if (demo.industry_template === 'beauty_salon') return <BeautySalonCustomers />
+  if (demo.industry_template === 'dental_clinic') return <DentalPatients />
+  if (demo.industry_template === 'esthetic_salon') return <EstheticCustomers />
+  if (demo.industry_template === 'restaurant') notFound()
 
   return (
     <div className="space-y-5">

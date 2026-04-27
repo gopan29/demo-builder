@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase-server'
 import { notFound } from 'next/navigation'
 import { medicalRecords } from '@/lib/sample-data'
 import BeautySalonRecords from '@/components/demo/beauty-salon/RecordsContent'
+import DentalRecords from '@/components/demo/dental-clinic/RecordsContent'
+import RestaurantSales from '@/components/demo/restaurant/SalesContent'
+import EstheticRecords from '@/components/demo/esthetic-salon/RecordsContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -12,6 +15,9 @@ export default async function RecordsPage({ params }: Props) {
   if (!demo) notFound()
 
   if (demo.industry_template === 'beauty_salon') return <BeautySalonRecords />
+  if (demo.industry_template === 'dental_clinic') return <DentalRecords />
+  if (demo.industry_template === 'restaurant') return <RestaurantSales />
+  if (demo.industry_template === 'esthetic_salon') return <EstheticRecords />
 
   return (
     <div className="space-y-5">

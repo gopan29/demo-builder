@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation'
 import { reservations, customers, dogs, lineCandidates, eparkEntries } from '@/lib/sample-data'
 import { beautyReservations, beautyCustomers, beautyLineCandidates } from '@/lib/sample-data-beauty'
 import BeautySalonDashboard from '@/components/demo/beauty-salon/DashboardContent'
+import DentalDashboard from '@/components/demo/dental-clinic/DashboardContent'
+import RestaurantDashboard from '@/components/demo/restaurant/DashboardContent'
+import EstheticDashboard from '@/components/demo/esthetic-salon/DashboardContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -14,9 +17,10 @@ export default async function DemoDashboard({ params }: Props) {
 
   const color = demo.theme_color
 
-  if (demo.industry_template === 'beauty_salon') {
-    return <BeautySalonDashboard themeColor={color} />
-  }
+  if (demo.industry_template === 'beauty_salon') return <BeautySalonDashboard themeColor={color} />
+  if (demo.industry_template === 'dental_clinic') return <DentalDashboard themeColor={color} />
+  if (demo.industry_template === 'restaurant') return <RestaurantDashboard themeColor={color} />
+  if (demo.industry_template === 'esthetic_salon') return <EstheticDashboard themeColor={color} />
 
   // dog_salon
   const todayReservations = reservations.filter(r => r.date === '2026-04-27')

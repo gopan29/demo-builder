@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase-server'
 import { notFound } from 'next/navigation'
 import { reservations, statusMap } from '@/lib/sample-data'
 import BeautySalonReservations from '@/components/demo/beauty-salon/ReservationsContent'
+import DentalReservations from '@/components/demo/dental-clinic/ReservationsContent'
+import RestaurantReservations from '@/components/demo/restaurant/ReservationsContent'
+import EstheticReservations from '@/components/demo/esthetic-salon/ReservationsContent'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -12,6 +15,9 @@ export default async function ReservationsPage({ params }: Props) {
   if (!demo) notFound()
 
   if (demo.industry_template === 'beauty_salon') return <BeautySalonReservations />
+  if (demo.industry_template === 'dental_clinic') return <DentalReservations />
+  if (demo.industry_template === 'restaurant') return <RestaurantReservations />
+  if (demo.industry_template === 'esthetic_salon') return <EstheticReservations />
 
   const grouped: Record<string, typeof reservations> = {}
   reservations.forEach(r => {
