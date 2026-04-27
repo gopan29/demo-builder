@@ -4,8 +4,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // /login と /demo/* はSupabase不要で通過
-  if (pathname.startsWith('/login') || pathname.startsWith('/demo')) {
+  // / /login /demo/* はSupabase不要で通過
+  if (pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/demo')) {
     return NextResponse.next({ request })
   }
 
