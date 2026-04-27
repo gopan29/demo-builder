@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { INDUSTRY_TEMPLATES } from '@/types/demo'
+import { INDUSTRY_TEMPLATES } from '@/lib/industry-templates'
 import type { Demo } from '@/types/demo'
 
 type Props = {

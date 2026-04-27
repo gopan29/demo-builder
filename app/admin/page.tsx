@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import Link from 'next/link'
 import type { Demo } from '@/types/demo'
-import { INDUSTRY_TEMPLATES } from '@/types/demo'
+import { INDUSTRY_TEMPLATES, TEMPLATE_LABEL } from '@/lib/industry-templates'
 import DeleteDemoButton from '@/components/DeleteDemoButton'
 
 export default async function AdminPage() {
@@ -11,8 +11,7 @@ export default async function AdminPage() {
     .select('*')
     .order('created_at', { ascending: false })
 
-  const templateLabel = (value: string) =>
-    INDUSTRY_TEMPLATES.find(t => t.value === value)?.label ?? value
+  const templateLabel = (value: string) => TEMPLATE_LABEL[value] ?? value
 
   return (
     <div>
