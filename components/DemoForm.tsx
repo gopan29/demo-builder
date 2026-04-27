@@ -74,6 +74,7 @@ export default function DemoForm({ demo, action }: Props) {
           {INDUSTRY_TEMPLATES.map(t => (
             <option key={t.value} value={t.value}>{t.label}</option>
           ))}
+          {/* templates: {INDUSTRY_TEMPLATES.length} */}
         </select>
       </div>
 
